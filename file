@@ -1,0 +1,9 @@
+##start
+room1 1 1
+##end
+room2 0 2
+room3 3 8
+#comment
+room1-room2
+room3-room2
+room1-room3
