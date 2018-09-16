@@ -12,6 +12,7 @@ typedef  struct s_room
 	struct s_room *next;
 }				t_room;
 
+
 typedef struct s_names
 {
 	char *name1;

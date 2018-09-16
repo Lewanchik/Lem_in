@@ -8,7 +8,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-t_room     *lstnew(char *name, int x, int y)
+t_room     *lstnew(char *name, int x, int y, int start_end)
 {
 	t_room *result;
 
@@ -19,6 +19,7 @@ t_room     *lstnew(char *name, int x, int y)
 	result->y = y;
 	result->name = (char *)malloc(sizeof(char) * (1 + ft_strlen(name)));
 	result->name = ft_strcpy(result->name, name);
+	result->start_end = start_end;
 	result->next = NULL;
 	return (result);
 }
@@ -196,16 +197,18 @@ int 	symb_in_string(char *str, char chr)
 
 
 
-void	add_room(char *line, t_room **room)
+void	add_room(char *line, t_room **room, int start_end)
 {
 	int i;
 	char *name;
 	int j;
 	int x;
 	int y;
+	t_room *tmp_room;
 
 	i = 0;
 	j = 0;
+	tmp_room = *room;
 	while (line[i] != ' ')
 		i++;
 	name = (char *) malloc(sizeof(char) * (i + 1));
@@ -217,6 +220,8 @@ void	add_room(char *line, t_room **room)
 	name[j] = '\0';
 	i++;
 	j = i;
+	if (line[i] == ' ')
+		coord_error(name);
 	while (line[i] != ' ')
 	{
 		if (line[i] < '0' || line[i] > '9')
@@ -233,7 +238,21 @@ void	add_room(char *line, t_room **room)
 		i++;
 	}
 	y = ft_atoi(line + j);
-	lstadd(room, lstnew(name, x, y));
+	while (tmp_room->next != NULL)
+	{
+		if (tmp_room->x == x && tmp_room->y == y)
+		{
+			printf("%s %s %s %s\n", "SAME COORDINATES IN", name, "AND", tmp_room->name);
+			exit(0);
+		}
+		if (ft_strcmp(tmp_room->name, name) == 0)
+		{
+			printf("%s %s\n", "EXIST AT LEAST TWO ROOMS WITH A NAME", name);
+			exit(0);
+		}
+		tmp_room = tmp_room->next;
+	}
+	lstadd(room, lstnew(name, x, y, start_end));
 }
 
 
@@ -358,43 +377,75 @@ t_room 	*read_rooms(t_room *room)
 {
 	char *line;
 	int fd;
-	int kek;
+	t_room *tmp_room;
+	int start;
+	int end;
 
-	kek = 0;
+	start = 0;
+	end = 0;
 	fd = open("file", O_RDONLY);
 	room->next = NULL;
 	while (get_next_line(fd, &line))
 	{
-		kek = 1;
 		if (symb_in_string(line, ' ') == 2)
-			add_room(line, &room);
+			add_room(line, &room, -1);
 		else if (ft_strcmp(line, "##start") == 0)
 		{
 			get_next_line(fd, &line);
-			add_room(line, &room);
-			room->start_end = 1;
+			if (symb_in_string(line, ' ') == 2)
+				add_room(line, &room, 1);
+			else
+			{
+				printf("%s", "WRONG LINE");
+				exit(0);
+			}
 		}
 		else if (ft_strcmp(line, "##end") == 0)
 		{
 			get_next_line(fd, &line);
-			add_room(line, &room);
-			room->start_end = 0;
+			if (symb_in_string(line, ' ') == 2)
+				add_room(line, &room, 0);
+			else
+			{
+				printf("%s", "WRONG LINE");
+				exit(0);
+			}
 		}
 		else if (if_comment(line) == 1)
 			continue;
 		else if (symb_in_string(line, '-') == 1)
 			break;
+		else
+		{
+			printf("%s", "WRONG LINE");
+			exit(0);
+		}
+	}
+	tmp_room = room;
+	while (tmp_room->next != NULL)
+	{
+		if (tmp_room->start_end == 1)
+			start = 1;
+		if (tmp_room->start_end == 0)
+			end = 1;
+		tmp_room = tmp_room->next;
+	}
+	if (tmp_room->start_end == 1)
+		start = 1;
+	if (tmp_room->start_end == 0)
+		end = 1;
+	if (start != 1 || end != 1)
+	{
+		printf("%s", "Start or end is missing");
+		exit(0);
 	}
 	malloc_subrooms(&room);
 	if (symb_in_string(line, '-') == 1)
-	{
-
 		add_link(&room, get_names(line));
-
-	}
 	else
 	{
-		;//error;
+		printf("%s", "ERROR!");
+		exit(0);
 	}
 	while (get_next_line(fd, &line))
 	{
@@ -407,16 +458,13 @@ t_room 	*read_rooms(t_room *room)
 		}
 		else
 		{
-			;//error;
+			printf("%s", "ERROR!");
+			exit(0);
 		}
-
 	}
-
-	if (kek == 1)
-		return (room);
-	else
-		exit(0);
+	return (room);
 }
+
 
 
 
