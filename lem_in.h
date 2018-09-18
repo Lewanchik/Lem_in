@@ -9,6 +9,7 @@ typedef  struct s_room
 	int y;
 	int start_end;
 	char **subrooms;
+	struct s_room **tree;
 	struct s_room *next;
 }				t_room;
 
