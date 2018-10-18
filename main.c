@@ -8,7 +8,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-int 	symb_in_string(char *str, char chr)
+int 	symb_in_string(const char *str, char chr)
 {
 	int i;
 	int j;
@@ -23,86 +23,6 @@ int 	symb_in_string(char *str, char chr)
 	}
 	return (j);
 }
-
-
-
-void	add_room(char *line, t_room **room, int start_end)
-{
-	int i;
-	char *name;
-	int j;
-	int x;
-	int y;
-	t_room *tmp_room;
-	int sign;
-
-	i = 0;
-	j = 0;
-	sign = 0;
-	tmp_room = *room;
-	while (line[i] != ' ')
-		i++;
-	name = (char *) malloc(sizeof(char) * (i + 1));
-	while (j < i)
-	{
-		if (line[j] == '-')
-		{
-			printf("%s\n", "At least one name has '-'");
-			exit(0);
-		}
-		name[j] = line[j];
-		j++;
-	}
-	name[j] = '\0';
-	if (name[0] == 'L')
-	{
-		printf("%s %s %s", "Name", name, "has 'L' in start");
-		exit(0);
-	}
-	i++;
-	j = i;
-	if (line[i] == '-')
-	{
-		sign = 1;
-		i++;
-		j++;
-	}
-	if (line[i] == ' ')
-		coord_error(name);
-	while (line[i] != ' ')
-	{
-		if (line[i] < '0' || line[i] > '9')
-			coord_error(name);
-		i++;
-	}
-	x = ft_atoi(line + j - sign);
-	sign = 0;
-	i++;
-	j = i;
-	if (line[i] == '-')
-	{
-		sign = 1;
-		i++;
-		j++;
-	}
-	while (line[i] != '\0')
-	{
-		if (line[i] < '0' || line[i] > '9')
-			coord_error(name);
-		i++;
-	}
-	y = ft_atoi(line + j - sign);
-	while (tmp_room->next != NULL)
-	{
-		if (tmp_room->x == x && tmp_room->y == y)
-			same_coords_error(name, tmp_room->name);
-		if (ft_strcmp(tmp_room->name, name) == 0)
-			two_name_error(name);
-		tmp_room = tmp_room->next;
-	}
-	lstadd(room, lstnew(name, x, y, start_end));
-}
-
 
 int 	if_comment(char  *str)
 {
@@ -137,131 +57,41 @@ void	goround_rooms(t_room **room, int current_length)
 	}
 }
 
-t_names	*get_names(const char *line)
+void    init_and_nulling(t_ints **ints)
 {
-	int i;
-	int j;
-	int k;
-	t_names *names;
-
-	k = 0;
-	i = 0;
-	j = 0;
-	names = (t_names *)malloc(sizeof(names));
-	while (line[i] != '-')
-		i++;
-	names->name1 = (char *)malloc(sizeof(char) * (i + 1));
-	while (j < i)
-	{
-		names->name1[j] = line[j];
-		j++;
-	}
-	i += 2;
-	while (line[i] != '\0')
-		i++;
-	j += 1;
-	names->name2 = (char *)malloc(sizeof(char) * (i - j - 1));
-	while (j < i)
-	{
-		names->name2[k] = line[j];
-		j++;
-		k++;
-	}
-	return (names);
+	(*ints) = (t_ints *)ft_memalloc(sizeof(t_ints));
+	(*ints)->k = 0;
+	(*ints)->i = 0;
+	(*ints)->j = 0;
 }
 
-void	add_link(t_room **room, t_names *names)
+t_names	*get_names(const char *line)
 {
-	int i;
-	t_room *room1;
-	t_room *room2;
-	t_room *tmp;
-	int j;
-	int label;
-
-	room1 = *room;
-	room2 = *room;
-	while ((*room)->next != NULL)
+	t_ints *ints;
+	t_names *names;
+	
+	names = (t_names *)ft_memalloc(sizeof(t_names));
+	init_and_nulling(&ints);
+	while (line[ints->i] != '-')
+		ints->i++;
+	names->name1 = (char *)malloc(sizeof(char) * (ints->i + 1));
+	while (ints->j < ints->i)
 	{
-		i = 0;
-		if (ft_strcmp(names->name1, (*room)->name) == 0)
-		{
-			label = 0;
-			while ((*room)->tree[i] != NULL)
-			{
-				if (ft_strcmp((*room)->tree[i]->name, names->name2) == 0)
-					label = 1;
-				i++;
-			}
-			while (room1->next != NULL)
-			{
-				if (ft_strcmp(names->name2, room1->name) == 0)
-				{
-					j = 0;
-					if (label == 0)
-						(*room)->tree[i] = room1;
-					label = 0;
-					tmp = (*room);
-					(*room) = room2;
-					while (ft_strcmp((*room)->name, room1->name) != 0 && *room != NULL)
-						*room = (*room)->next;
-					while ((*room)->tree[j] != NULL)
-					{
-						if (ft_strcmp((*room)->tree[j]->name, names->name1) == 0)
-							label = 1;
-						j++;
-					}
-					if (label == 0)
-						(*room)->tree[j] = tmp;
-					(*room) = tmp;
-					room1 = room2;
-					break;
-				}
-				room1 = room1->next;
-			}
-		}
-		else if (ft_strcmp(names->name2, (*room)->name) == 0)
-		{
-			label = 0;
-			while ((*room)->tree[i] != NULL)
-			{
-				if (ft_strcmp((*room)->tree[i]->name, names->name1) == 0)
-					label = 1;
-				i++;
-			}
-			while (room1->next != NULL)
-			{
-				if (ft_strcmp(names->name1, room1->name) == 0)
-				{
-					j = 0;
-					if (label == 0)
-						(*room)->tree[i] = room1;
-					label = 0;
-					tmp = (*room);
-					(*room) = room2;
-					while (ft_strcmp((*room)->name, room1->name) != 0 && *room != NULL)
-						*room = (*room)->next;
-					while ((*room)->tree[j] != NULL)
-					{
-						if (ft_strcmp((*room)->tree[j]->name, names->name2) == 0)
-						{
-							label = 1;
-							break;
-						}
-						j++;
-					}
-					if (label == 0)
-						(*room)->tree[j] = tmp;
-					(*room) = tmp;
-					room1 = room2;
-					break;
-				}
-				room1 = room1->next;
-			}
-		}
-		(*room) = (*room)->next;
+		names->name1[ints->j] = line[ints->j];
+		ints->j++;
 	}
-	*room = room2;
+	ints->i += 2;
+	while (line[ints->i] != '\0')
+		ints->i++;
+	ints->j += 1;
+	names->name2 = (char *)malloc(sizeof(char) * (ints->i - ints->j - 1));
+	while (ints->j < ints->i)
+	{
+		names->name2[ints->k] = line[ints->j];
+		ints->j++;
+		ints->k++;
+	}
+	return (names);
 }
 
 void malloc_subrooms(t_room **room)
