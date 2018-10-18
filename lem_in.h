@@ -2,6 +2,8 @@
 #ifndef LEM_IN_H
 # define LEM_IN_H
 
+#include "libft.h"
+
 typedef  struct s_room
 {
 	char *name;
@@ -24,6 +26,8 @@ typedef struct s_names
 	char *name2;
 }				t_names;
 
+t_room     *lstnew(char *name, int x, int y, int start_end);
+void		lstadd(t_room **result, t_room *new_result);
 void	start_end_miss_error(void);
 void	wrong_line_error(void);
 void	two_name_error(char *name);
