@@ -29,6 +29,8 @@ typedef struct  s_ints
 	int k;
 	int label;
 	int sign;
+	int startt;
+	int end;
 	t_room *start;
 }               t_ints;
 
@@ -40,6 +42,9 @@ typedef struct s_names
 }				t_names;
 
 int 	symb_in_string(const char *str, char chr);
+int 	min_room(t_room *room);
+int		print_ants(t_room *room, int k);
+t_room 	*read_rooms(t_room *room);
 int 	if_comment(char  *str);
 void malloc_subrooms(t_room **room);
 t_names	*get_names(const char *line);

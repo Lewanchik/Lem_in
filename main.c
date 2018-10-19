@@ -28,6 +28,7 @@ int 	if_comment(char  *str)
 {
 	if (ft_strncmp(str, "#", 1) != 0)
 		return (0);
+	printf("%s\n", str);
 	return (1);
 }
 
@@ -134,104 +135,12 @@ int	read_ants()
 	while (line[i] != 0)
 	{
 		if (line[i] < '0' || line[i] > '9')
-		{
 			wrong_line_error();
-		}
 		i++;
 	}
 	printf("%s\n", line);
 	return (ft_atoi(line));
 }
-
-t_room 	*read_rooms(t_room *room)
-{
-	char	*line;
-	t_room	*tmp_room;
-	int		start;
-	int		end;
-
-	start = 0;
-	end = 0;
-	room->next = NULL;
-
-	while (get_next_line(0, &line))
-	{
-		if (symb_in_string(line, ' ') == 2)
-		{
-			add_room(line, &room, -1);
-			printf("%s\n", line);
-		}
-		else if (ft_strcmp(line, "##start") == 0)
-		{
-			printf("%s\n", line);
-			get_next_line(0, &line);
-			if (symb_in_string(line, ' ') == 2)
-			{
-				add_room(line, &room, 1);
-				printf("%s\n", line);
-			}
-			else
-				wrong_line_error();
-		}
-		else if (ft_strcmp(line, "##end") == 0)
-		{
-			printf("%s\n", line);
-			get_next_line(0, &line);
-			if (symb_in_string(line, ' ') == 2)
-			{
-				add_room(line, &room, 0);
-				printf("%s\n", line);
-			}
-			else
-				wrong_line_error();
-		}
-		else if (if_comment(line) == 1)
-		{
-			printf("%s\n", line);
-			continue;
-		}
-		else if (symb_in_string(line, '-') == 1)
-			break;
-		else
-			wrong_line_error();
-	}
-	tmp_room = room;
-	while (tmp_room != NULL)
-	{
-		if (tmp_room->start_end == 1)
-			start = 1;
-		if (tmp_room->start_end == 0)
-			end = 1;
-		tmp_room = tmp_room->next;
-	}
-	if (start != 1 || end != 1)
-		start_end_miss_error();
-	malloc_subrooms(&room);
-	if (symb_in_string(line, '-') == 1)
-	{
-		printf("%s\n", line);
-		add_link(&room, get_names(line));
-	}
-	else
-		wrong_line_error();
-	while (get_next_line(0, &line))
-	{
-		if (if_comment(line) == 1)
-		{
-			printf("%s\n", line);
-			continue;
-		}
-		else if (symb_in_string(line, '-') == 1)
-		{
-			printf("%s\n", line);
-			add_link(&room, get_names(line));
-		}
-		else
-			return (room);
-	}
-	return (room);
-}
-
 
 int 	min_room(t_room *room)
 {
@@ -261,50 +170,6 @@ int 	min_room(t_room *room)
 	return (-1);
 }
 
-int		print_ants(t_room *room, int k)
-{
-	int		label;
-	t_room	*room_tmp;
-	int		room_min;
-
-	room_tmp = room;
-	label = 0;
-	while (room != NULL)
-	{
-		if (room->ant_number_was != 0)
-		{
-			label = 1;
-			room_min = min_room(room);
-			if (room->start_end == 0)
-			{
-				room->amount_of_ants++;
-				label = 0;
-				room->ant_number_was = 0;
-				break;
-			}
-			room->tree[room_min]->ant_number_was = room->tree[room_min]->ant_number_current;
-			room->tree[room_min]->ant_number_current = room->ant_number_was;
-			room->ant_number_was = 0;
-		}
-		room = room->next;
-	}
-	if (label == 0)
-	{
-		while(room_tmp != NULL)
-		{
-			if (room_tmp->ant_number_current != 0)
-			{
-				if (room_tmp->ant_number_current > k)
-					break;
-				printf("L%d-%s ", room_tmp->ant_number_current, room_tmp->name);
-			}
-			room_tmp = room_tmp->next;
-		}
-		printf("\n");
-		return (1);
-	}
-	return (0);
-}
 
 int main()
 {
@@ -313,7 +178,6 @@ int main()
 	t_room *room2;
 	int i;
 	int k;
-	int length;
 	int ants;
 
 	room = (t_room*)malloc(sizeof(t_room));
@@ -346,9 +210,7 @@ int main()
 	while (room1 != NULL)
 	{
 		if (room1->start_end == 0)
-		{
 			break;
-		}
 		room1 = room1->next;
 	}
 	goround_rooms(&room1, 0);
@@ -357,9 +219,7 @@ int main()
 	while (room1 != NULL)
 	{
 		if (room1->start_end == 1)
-		{
 			break;
-		}
 		room1 = room1->next;
 	}
 	printf("\n");
