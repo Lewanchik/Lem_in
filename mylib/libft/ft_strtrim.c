@@ -3,40 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achernys <achernys@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ozalisky <ozalisky@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/09 16:30:17 by achernys          #+#    #+#             */
-/*   Updated: 2017/11/09 16:30:34 by achernys         ###   ########.fr       */
+/*   Created: 2017/11/08 17:58:57 by ozalisky          #+#    #+#             */
+/*   Updated: 2017/11/16 15:24:13 by ozalisky         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strtrim(char const *s)
+static int		ft_sh_wsps(char c)
 {
-	size_t	i;
-	size_t	j;
-	char	*outs;
+	if (c == ' ' || c == '\n' || c == '\t')
+		return (1);
+	return (0);
+}
 
-	if (s == NULL)
-		return (NULL);
+char			*ft_strtrim(char const *s)
+{
+	char	*mem;
+	size_t	i;
+	size_t	start;
+	size_t	end;
+
+	end = 0;
+	start = 0;
 	i = 0;
-	j = ft_strlen(s) - 1;
-	while (s[i] == ' ' || s[i] == '\n' || s[i] == '\t')
+	if (s == 0)
+		return (0);
+	while (ft_sh_wsps(s[i]) && s[i])
+		i++;
+	if (ft_strlen(s) == i)
+		return (ft_strnew(1));
+	start = i;
+	while (s[i])
 	{
+		if (ft_sh_wsps(s[i]) == 0)
+			end = i;
 		i++;
 	}
-	if (i == ft_strlen(s))
-	{
-		if ((outs = ft_strnew(0)))
-			return (outs);
-	}
-	while (s[j] == ' ' || s[j] == '\n' || s[j] == '\t')
-	{
-		j--;
-	}
-	outs = ft_strsub(s, (unsigned int)i, (j - i) + 1);
-	if (outs == NULL)
-		return (NULL);
-	return (outs);
+	if ((mem = ft_strsub(s, start, (end - start + 1))) == 0)
+		return (0);
+	return (mem);
 }

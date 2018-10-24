@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achernys <achernys@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ozalisky <ozalisky@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/09 16:00:44 by achernys          #+#    #+#             */
-/*   Updated: 2017/11/09 16:01:29 by achernys         ###   ########.fr       */
+/*   Created: 2017/11/08 17:57:34 by ozalisky          #+#    #+#             */
+/*   Updated: 2017/11/16 14:36:05 by ozalisky         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,29 @@
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*joins;
-	size_t	i;
-	size_t	j;
+	char	*mem;
+	size_t	s_i;
+	size_t	mem_i;
 
-	if (s1 == NULL || s2 == NULL)
-		return (NULL);
-	joins = ft_strnew(ft_strlen(s1) + ft_strlen(s2));
-	if (joins == NULL)
-		return (NULL);
-	i = 0;
-	while (i < ft_strlen(s1))
+	s_i = 0;
+	mem_i = 0;
+	if (s1 == 0 || s2 == 0)
+		return (0);
+	if ((mem = ft_strnew(ft_strlen(s1) + ft_strlen(s2))) == 0)
+		return (0);
+	while (s1[s_i])
 	{
-		joins[i] = s1[i];
-		i++;
+		mem[mem_i] = s1[s_i];
+		mem_i++;
+		s_i++;
 	}
-	j = 0;
-	while (j < ft_strlen(s2))
+	s_i = 0;
+	while (s2[s_i])
 	{
-		joins[i + j] = s2[j];
-		j++;
+		mem[mem_i] = s2[s_i];
+		mem_i++;
+		s_i++;
 	}
-	return (joins);
+	mem[mem_i] = '\0';
+	return (mem);
 }

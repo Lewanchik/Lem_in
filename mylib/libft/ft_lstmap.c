@@ -3,36 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achernys <achernys@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ozalisky <ozalisky@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/11 04:35:18 by achernys          #+#    #+#             */
-/*   Updated: 2017/11/11 07:53:23 by achernys         ###   ########.fr       */
+/*   Created: 2017/11/14 00:13:16 by ozalisky          #+#    #+#             */
+/*   Updated: 2017/11/15 16:42:02 by ozalisky         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	del(void *content, size_t content_size)
+t_list	*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
 {
-	ft_memset(content, 0, content_size);
-	free(content);
-}
-
-t_list		*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
-{
-	t_list *newlst;
+	t_list *n_list;
 
 	if (lst == NULL || f == NULL)
-		return (NULL);
-	if (!(newlst = (t_list *)malloc(sizeof(*newlst))))
-		return (NULL);
-	if (lst->next == NULL)
 	{
-		newlst = (*f)(lst);
-		return (newlst);
+		return (NULL);
 	}
-	if (!(newlst = (*f)(lst)))
-		ft_lstdel(&newlst, &del);
-	newlst->next = ft_lstmap(lst->next, f);
-	return (newlst);
+	if (lst)
+	{
+		n_list = (*f)(lst);
+		n_list->next = ft_lstmap(lst->next, f);
+		return (n_list);
+	}
+	return (NULL);
 }

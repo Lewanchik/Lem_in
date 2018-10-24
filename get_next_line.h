@@ -3,27 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dlewando <dlewando@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ozalisky <ozalisky@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/12 16:13:38 by dlewando          #+#    #+#             */
-/*   Updated: 2018/01/14 14:11:19 by dlewando         ###   ########.fr       */
+/*   Created: 2018/02/08 15:28:29 by ozalisky          #+#    #+#             */
+/*   Updated: 2018/02/26 13:31:00 by ozalisky         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 # define BUFF_SIZE 1
+# include "unistd.h"
+# include "stdlib.h"
+# include "./libft/libft.h"
 
+int					get_next_line(const int fd, char **line);
 
-# include "./libft.h"
-
-typedef struct	s_lstr
+typedef struct		s_gnl
 {
-	int				save_fd;
-	size_t			buf_s;
-	char			*buf;
-	struct s_lstr	*next;
-}				t_lstr;
-
-int				get_next_line(const int fd, char **line);
+	int				fd;
+	char			*buffer;
+	size_t			file_size;
+	struct s_gnl	*next;
+}					t_gnl;
 #endif

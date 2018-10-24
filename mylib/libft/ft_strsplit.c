@@ -3,78 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strsplit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achernys <achernys@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ozalisky <ozalisky@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/09 17:10:21 by achernys          #+#    #+#             */
-/*   Updated: 2017/11/09 17:10:40 by achernys         ###   ########.fr       */
+/*   Created: 2017/11/08 17:58:33 by ozalisky          #+#    #+#             */
+/*   Updated: 2017/11/17 15:58:17 by ozalisky         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char	**memfree(char **s)
+char	**ft_strsplit(char const *s, char c)
 {
-	while (s != NULL)
-	{
-		ft_memdel((void **)s);
-		s++;
-	}
-	return (NULL);
-}
+	char	**mem;
+	size_t	start;
+	size_t	i;
+	size_t	mem_i;
 
-static char	**strcreate(char const *s, char c, int tmp, int i)
-{
-	int		j;
-	char	**str;
-
-	j = 0;
-	while (s[++i] != '\0')
-	{
-		if (s[i] != c && (s[i + 1] == c || s[i + 1] == '\0'))
-			tmp += 1;
-	}
-	if (!(str = (char **)ft_memalloc(sizeof(char*) * (tmp + 1))))
-		return (NULL);
-	tmp = 0;
-	while (*s != '\0')
-	{
-		tmp = *s != c ? tmp + 1 : tmp + 0;
-		if (*s != c && (*(s + 1) == c || *(s + 1) == '\0'))
-		{
-			if (!(str[j++] = (char *)ft_memalloc(sizeof(char) * (tmp + 1))))
-				return (memfree(str));
-			tmp = 0;
-		}
-		s++;
-	}
-	str[j] = 0;
-	return (str);
-}
-
-char		**ft_strsplit(char const *s, char c)
-{
-	int		i;
-	int		j;
-	char	**outsarr;
-
-	if (s == NULL || !(outsarr = strcreate(s, c, 0, -1)))
-		return (NULL);
+	mem_i = 0;
 	i = 0;
-	j = 0;
-	while (*s != '\0')
+	start = 0;
+	if (!s || !c)
+		return (NULL);
+	if ((mem = (char **)ft_memalloc((ft_words(s, c) + 1)
+		* sizeof(char*))) == NULL)
+		return (NULL);
+	while (mem_i < ft_words(s, c))
 	{
-		if (*s != c)
-		{
-			outsarr[i][j] = *s;
-			j++;
-		}
-		if (*s != c && (*(s + 1) == c || *(s + 1) == '\0'))
-		{
-			outsarr[i][j] = '\0';
-			j = 0;
+		while (s[i] == c)
+			++i;
+		start = i;
+		while (s[i] != c && s[i] != '\0')
 			i++;
-		}
-		s++;
+		if ((mem[mem_i++] = ft_strsub(s, start, i - start)) == NULL)
+			return (ft_arrdel(mem, ft_words(s, c)) ? (NULL) : (NULL));
+		i++;
 	}
-	return (outsarr);
+	return (mem);
 }

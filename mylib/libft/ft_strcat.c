@@ -3,27 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strcat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anton <anton@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ozalisky <ozalisky@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/28 19:46:10 by anton             #+#    #+#             */
-/*   Updated: 2017/10/28 20:12:38 by anton            ###   ########.fr       */
+/*   Created: 2017/11/02 12:49:16 by ozalisky          #+#    #+#             */
+/*   Updated: 2017/11/15 17:31:31 by ozalisky         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-char	*ft_strcat(char *dest, const char *src)
+char	*ft_strcat(char *s1, const char *s2)
 {
-	size_t i;
-	size_t len;
+	char			*copy_s1;
+	const char		*copy_s2;
+	unsigned int	string_i;
+	unsigned int	string_i2;
 
-	i = 0;
-	len = ft_strlen(dest);
-	while (src[i] != '\0')
+	copy_s1 = s1;
+	copy_s2 = s2;
+	string_i = 0;
+	string_i2 = 0;
+	while (copy_s1[string_i] != '\0')
 	{
-		dest[len + i] = src[i];
-		i++;
+		string_i++;
 	}
-	dest[len + i] = '\0';
-	return (dest);
+	while (copy_s2[string_i2] != '\0')
+	{
+		copy_s1[string_i] = copy_s2[string_i2];
+		string_i++;
+		string_i2++;
+	}
+	copy_s1[string_i] = '\0';
+	return (s1);
 }

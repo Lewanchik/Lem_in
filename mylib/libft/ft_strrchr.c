@@ -3,35 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achernys <achernys@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ozalisky <ozalisky@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/02 16:07:51 by achernys          #+#    #+#             */
-/*   Updated: 2017/11/02 16:08:01 by achernys         ###   ########.fr       */
+/*   Created: 2017/11/04 13:45:24 by ozalisky          #+#    #+#             */
+/*   Updated: 2017/11/13 11:29:11 by ozalisky         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strrchr(const char *s, char c)
+char	*ft_strrchr(const char *s, int c)
 {
-	unsigned char	flag;
-	size_t			i;
-	size_t			tmp;
+	char *c_s;
+	char *f_c;
+	char c_c;
 
-	flag = 0;
-	i = 0;
-	if (c == '\0')
-		return (&((char *)s)[ft_strlen(s)]);
-	while (((char *)s)[i] != '\0')
+	c_s = (char *)s;
+	f_c = NULL;
+	c_c = (char)c;
+	while (*c_s)
 	{
-		if (((char *)s)[i] == c)
+		if (*c_s == c_c)
 		{
-			tmp = i;
-			flag = 1;
+			f_c = c_s;
 		}
-		i++;
+		++c_s;
 	}
-	if (flag == 1)
-		return (&((char *)s)[tmp]);
-	return (0);
+	if (*c_s == c_c)
+	{
+		f_c = c_s;
+	}
+	return (f_c);
 }

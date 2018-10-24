@@ -3,25 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achernys <achernys@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ozalisky <ozalisky@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/08 16:17:55 by achernys          #+#    #+#             */
-/*   Updated: 2017/11/09 13:50:23 by achernys         ###   ########.fr       */
+/*   Created: 2017/11/04 16:46:39 by ozalisky          #+#    #+#             */
+/*   Updated: 2017/11/15 17:34:08 by ozalisky         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-int		ft_strcmp(const char *str1, const char *str2)
+int		ft_strcmp(const char *s1, const char *s2)
 {
-	size_t i;
+	unsigned char *c_s1;
+	unsigned char *c_s2;
 
-	i = 0;
-	while (str1[i] != '\0' || str2[i] != '\0')
+	c_s1 = (unsigned char*)s1;
+	c_s2 = (unsigned char*)s2;
+	while (*c_s1 == *c_s2)
 	{
-		if (str1[i] != str2[i])
-			return ((unsigned char)str1[i] - (unsigned char)str2[i]);
-		i++;
+		if (0 == *c_s1)
+		{
+			return (0);
+		}
+		++c_s1;
+		++c_s2;
 	}
-	return (0);
+	return (*c_s1 < *c_s2 ? *c_s1 - *c_s2 : *c_s1 - *c_s2);
 }

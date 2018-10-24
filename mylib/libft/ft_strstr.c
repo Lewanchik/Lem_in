@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strstr.c                                           :+:      :+:    :+:   */
+/*   ft_strstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achernys <achernys@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ozalisky <ozalisky@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/02 16:31:13 by achernys          #+#    #+#             */
-/*   Updated: 2017/11/06 22:33:15 by achernys         ###   ########.fr       */
+/*   Created: 2017/11/04 13:59:02 by ozalisky          #+#    #+#             */
+/*   Updated: 2017/11/09 13:18:05 by ozalisky         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,26 @@
 
 char	*ft_strstr(const char *big, const char *little)
 {
-	size_t	i;
+	unsigned int i;
+	unsigned int f;
 
-	if (ft_strlen(little) == 0)
-		return ((char *)big);
-	big = ft_strchr(big, little[0]);
-	while (big != '\0')
+	i = 0;
+	if (0 == ft_strlen(little))
 	{
-		i = 0;
-		while (little[i] != '\0')
+		return ((char *)big);
+	}
+	while ('\0' != big[i])
+	{
+		f = 0;
+		while (big[i + f] == little[f])
 		{
-			if (little[i] != big[i])
-				break ;
-			i++;
+			++f;
+			if ('\0' == little[f])
+			{
+				return ((char *)big + i);
+			}
 		}
-		if (i == ft_strlen(little))
-			return ((char *)big);
-		big = ft_strchr(big + 1, little[0]);
+		++i;
 	}
 	return (0);
 }

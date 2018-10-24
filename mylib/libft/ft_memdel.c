@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memdel.cpp                                      :+:      :+:    :+:   */
+/*   ft_memdel.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achernys <achernys@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ozalisky <ozalisky@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/09 12:59:29 by achernys          #+#    #+#             */
-/*   Updated: 2017/11/09 12:59:51 by achernys         ###   ########.fr       */
+/*   Created: 2017/11/08 17:53:59 by ozalisky          #+#    #+#             */
+/*   Updated: 2017/11/15 17:52:16 by ozalisky         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,12 @@
 
 void	ft_memdel(void **ap)
 {
-	if (ap != NULL && *ap != NULL)
+	if (ap == NULL)
 	{
-		free(*ap);
-		*ap = NULL;
+		return ;
 	}
+	if (*ap == NULL)
+		return ;
+	free(*ap);
+	*ap = NULL;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achernys <achernys@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: ozalisky <ozalisky@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/10 21:43:48 by achernys          #+#    #+#             */
-/*   Updated: 2018/07/12 15:30:29 by achernys         ###   ########.fr       */
+/*   Created: 2017/11/08 17:55:46 by ozalisky          #+#    #+#             */
+/*   Updated: 2017/11/12 12:16:39 by ozalisky         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,11 @@
 
 void	ft_putstr(char const *s)
 {
-	if (!s)
+	if (s == NULL)
 		return ;
-	write(1, s, ft_strlen(s));
+	while (*s)
+	{
+		ft_putchar(*s);
+		++s;
+	}
 }
