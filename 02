@@ -2,7 +2,13 @@
 name="$0"
 name=$(echo $name | cut -c 3-)
 
-echo $name>>.gitignore
+if grep -q $name .gitignore
+then
+	true
+else
+	echo $name>>.gitignore
+fi
+
 message=$1
 if [$1 -eq ""]
 then
