@@ -3,10 +3,10 @@ name="$0"
 name=$(echo $name | cut -c 3-)
 
 echo $name>>.gitignore
-message="empty commit message"
-if $1 -eq ""
+message=$1
+if [$1 -eq ""]
 then
-	message=$1
+	message="empty commit message"
 fi
 
 git add .
