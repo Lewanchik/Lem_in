@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "$1">>.gitignore
+echo "$2">>.gitignore
 message="empty commit message"
 if $1==""
 then
